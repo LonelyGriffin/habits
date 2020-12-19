@@ -34,7 +34,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettier": "prettier --loglevel \"warn\"  --write  \"**/*.(js|ts|tsx|css)\""
   },
   "eslintConfig": {
     "extends": [
@@ -54,7 +55,13 @@
       "last 1 safari version"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prettier"
+    }
+  },
   "devDependencies": {
+    "husky": "^4.3.6",
     "prettier": "^2.2.1"
   }
 }
