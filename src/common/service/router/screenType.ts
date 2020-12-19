@@ -1,4 +1,4 @@
-export const enum ScreenType {
-  Habits,
-  Diary
+export enum ScreenType {
+  Habits = 'habit',
+  Diary = 'diary'
 }
