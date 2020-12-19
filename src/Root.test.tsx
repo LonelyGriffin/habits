@@ -1,9 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import Root from './Root';
 
-test('renders learn react link', () => {
+test('renders without crash', () => {
   render(<Root />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
 });
