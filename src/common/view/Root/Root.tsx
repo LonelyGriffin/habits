@@ -1,10 +1,8 @@
-import React from 'react';
-import './Root.css';
+import React from 'react'
+import './Root.css'
 
 function Root() {
-  return (
-    <div>Root</div>
-  );
+  return <div>Root</div>
 }
 
-export default Root;
+export default Root
