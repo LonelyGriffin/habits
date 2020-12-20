@@ -1,7 +1,7 @@
 import 'reflect-metadata'
+import 'antd/dist/antd.less'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
 import Root from './common/view/Root/Root'
 import {createRootDIContainer} from './common/dependencyInjection/rootContainer'
 import {DIContainerContext} from './common/dependencyInjection/reactContext'

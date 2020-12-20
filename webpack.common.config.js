@@ -1,6 +1,8 @@
 const path = require('path')
 const CompressionPlugin = require('compression-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   entry: {
@@ -8,7 +10,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash].js',
+    chunkFilename: '[name].[chunkhash].js'
   },
   module: {
     rules: [
@@ -29,19 +32,40 @@ module.exports = {
         loader: 'source-map-loader'
       },
       {
-        test: /\.css$/,
+        test: /\.less$/,
         use: [
-          'style-loader',
           {
-            loader: 'css-loader',
+            loader: MiniCssExtractPlugin.loader,
             options: {
-              importLoaders: 1,
+              esModule: true,
               modules: {
-                localIdentName: '[name]__[local]--[hash:base64:5]'
+                namedExport: true
               }
             }
           },
-          'postcss-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              esModule: true,
+              importLoaders: 2,
+              modules: {
+                exportLocalsConvention: 'camelCaseOnly',
+                namedExport: true,
+                localIdentName: '[path]__[local]',
+                auto: true,
+                exportOnlyLocals: true
+              }
+            }
+          },
+          'postcss-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                javascriptEnabled: true
+              }
+            }
+          }
         ]
       },
       {
@@ -75,6 +99,7 @@ module.exports = {
     extensions: ['.ts', '.js', '.tsx', '.json', '.yaml']
   },
   plugins: [
+    new MiniCssExtractPlugin(),
     new CompressionPlugin({
       algorithm: 'gzip',
       test: /\.js$|\.css$|\.html$|\.svg$|\.mp3$/,
@@ -85,5 +110,28 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'public/index.html'
     })
-  ]
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+    runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      minSize: 0,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name(module) {
+            // get the name. E.g. node_modules/packageName/not/this/part.js
+            // or node_modules/packageName
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
+
+            // npm package names are URL-safe, but some servers don't like @ symbols
+            return `npm.${packageName.replace('@', '')}`
+          }
+        }
+      }
+    }
+  }
 }

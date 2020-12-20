@@ -9,12 +9,6 @@ export function HabitsScreenView() {
     router.replaceTo(ScreenType.Diary)
   }, [router])
 
-  useEffect(() => {
-    return router.subscribe((newCurrentRouter) => {
-      console.log(newCurrentRouter, 'newCurrentRouter')
-    })
-  }, [])
-
   return (
     <div>
       <div>Habits</div>

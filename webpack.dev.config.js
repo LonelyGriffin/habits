@@ -1,6 +1,7 @@
 const path = require('path')
 const commonConfig = require('./webpack.common.config')
 const {merge} = require('webpack-merge')
+// const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
 
 module.exports = merge(commonConfig, {
   devtool: 'eval-source-map',
@@ -11,5 +12,10 @@ module.exports = merge(commonConfig, {
     historyApiFallback: true,
     hot: true,
     contentBase: path.join(__dirname, 'public')
-  }
+  },
+  plugins: [
+    // new BundleAnalyzerPlugin({
+    //   openAnalyzer: true
+    // }),
+  ]
 })

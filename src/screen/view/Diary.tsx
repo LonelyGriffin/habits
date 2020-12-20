@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react'
 import {useRouter} from '../../common/service/router/hooks'
 import {ScreenType} from '../../common/service/router'
+import {PageHeader, Button} from 'antd'
 
 export function DiaryScreenView() {
   const router = useRouter()
@@ -11,8 +12,10 @@ export function DiaryScreenView() {
 
   return (
     <div>
-      <div>Diary</div>
-      <button onClick={h}>{'Habits'}</button>
+      <PageHeader title={'Дневник'} />
+      <Button onClick={h} type='dashed'>
+        {'Habits'}
+      </Button>
     </div>
   )
 }
