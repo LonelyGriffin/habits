@@ -1,7 +1,7 @@
 import {Route, Router, ScreenType} from './'
 import {inject, injectable} from 'inversify'
 import {EventEmitter} from 'events'
-import {RootDIType} from '../../rootDIType'
+import {RootDIType} from '../../dependencyInjection/rootType'
 import {History} from 'history'
 
 enum EventType {

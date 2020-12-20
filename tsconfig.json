@@ -4,7 +4,7 @@
     "emitDecoratorMetadata": true,
     "target": "es5",
     "lib": ["esnext", "dom"],
-    "types": ["reflect-metadata", "node", "jest"],
+    "types": ["reflect-metadata", "node", "jest", "@redtea/react-inversify"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

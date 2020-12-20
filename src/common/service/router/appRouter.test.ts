@@ -1,5 +1,5 @@
-import {createRootDIContainer} from '../../rootDIContainer'
-import {RootDIType} from '../../rootDIType'
+import {createRootDIContainer} from '../../dependencyInjection/rootContainer'
+import {RootDIType} from '../../dependencyInjection/rootType'
 import {Route, Router, ScreenType} from './'
 import {createMemoryHistory, History} from 'history'
 

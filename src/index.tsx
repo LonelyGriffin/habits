@@ -1,13 +1,20 @@
+import 'reflect-metadata'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import Root from './common/view/Root/Root'
+import {createRootDIContainer} from './common/dependencyInjection/rootContainer'
+import {DIContainerContext} from './common/dependencyInjection/reactContext'
 // import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 // import reportWebVitals from './reportWebVitals'
 
+const rootDIContainer = createRootDIContainer()
+
 ReactDOM.render(
   <React.StrictMode>
-    <Root />
+    <DIContainerContext.Provider value={rootDIContainer}>
+      <Root />
+    </DIContainerContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 )
