@@ -18,6 +18,7 @@ module.exports = {
       {
         test: /\.(js|ts|tsx)$/,
         loader: 'ts-loader',
+        include: path.resolve(__dirname, 'src'),
         options: {
           transpileOnly: true,
           allowTsInNodeModules: true,
