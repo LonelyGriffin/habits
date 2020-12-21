@@ -52,8 +52,7 @@ module.exports = {
                 exportLocalsConvention: 'camelCaseOnly',
                 namedExport: true,
                 localIdentName: '[path]__[local]',
-                auto: true,
-                exportOnlyLocals: true
+                auto: true
               }
             }
           },

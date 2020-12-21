@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom'
 import Root from './common/view/Root/Root'
 import {createRootDIContainer} from './common/dependencyInjection/rootContainer'
 import {DIContainerContext} from './common/dependencyInjection/reactContext'
+import {ConfigProvider as AntdConfigProvider} from 'antd'
+import ruRuLocale from 'antd/lib/locale/ru_RU'
 // import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 // import reportWebVitals from './reportWebVitals'
 
@@ -13,7 +15,9 @@ const rootDIContainer = createRootDIContainer()
 ReactDOM.render(
   <React.StrictMode>
     <DIContainerContext.Provider value={rootDIContainer}>
-      <Root />
+      <AntdConfigProvider locale={ruRuLocale}>
+        <Root />
+      </AntdConfigProvider>
     </DIContainerContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')

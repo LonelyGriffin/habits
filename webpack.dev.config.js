@@ -13,6 +13,7 @@ module.exports = merge(commonConfig, {
     hot: true,
     contentBase: path.join(__dirname, 'public')
   },
+  cache: false,
   plugins: [
     // new BundleAnalyzerPlugin({
     //   openAnalyzer: true
