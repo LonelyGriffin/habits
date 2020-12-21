@@ -11,7 +11,7 @@ enum EventType {
 @injectable()
 export class AppRouter implements Router {
   private internalCurrentRoute: Readonly<Route> = {
-    screenType: ScreenType.Habits
+    screenType: ScreenType.Diary
   }
   private eventEmitter = new EventEmitter()
 
