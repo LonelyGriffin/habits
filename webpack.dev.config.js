@@ -13,7 +13,6 @@ module.exports = merge(commonConfig, {
     hot: true,
     contentBase: path.join(__dirname, 'public')
   },
-  watch: true,
   cache: {
     type: 'memory'
   },

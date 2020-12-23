@@ -7,28 +7,35 @@ import {createRootDIContainer} from './common/dependencyInjection/rootContainer'
 import {DIContainerContext} from './common/dependencyInjection/reactContext'
 import {ConfigProvider as AntdConfigProvider} from 'antd'
 import ruRuLocale from 'antd/lib/locale/ru_RU'
-// import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-// import reportWebVitals from './reportWebVitals'
+import {ServiceWorkerManager} from './common/service/serviceWorker'
+import {RootDIType} from './common/dependencyInjection/rootType'
 
-const rootDIContainer = createRootDIContainer()
+;(async () => {
+  const rootDIContainer = createRootDIContainer()
 
-ReactDOM.render(
-  <React.StrictMode>
-    <DIContainerContext.Provider value={rootDIContainer}>
-      <AntdConfigProvider locale={ruRuLocale}>
-        <Root />
-      </AntdConfigProvider>
-    </DIContainerContext.Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+  ReactDOM.render(
+    <React.StrictMode>
+      <DIContainerContext.Provider value={rootDIContainer}>
+        <AntdConfigProvider locale={ruRuLocale}>
+          <Root />
+        </AntdConfigProvider>
+      </DIContainerContext.Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+  )
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://cra.link/PWA
-// serviceWorkerRegistration.unregister()
+  const sw = rootDIContainer.get<ServiceWorkerManager>(RootDIType.ServiceWorker)
+  const isSwRegistered = await sw.register()
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals()
+  if (isSwRegistered.isFailed) {
+    throw isSwRegistered.error.unwrap()
+  }
+  console.log('registered')
+  const isSwInstalled = await sw.waitStatus('installed')
+
+  if (isSwInstalled.isFailed) {
+    throw isSwInstalled.error.unwrap()
+  }
+
+  console.log('activated')
+})()

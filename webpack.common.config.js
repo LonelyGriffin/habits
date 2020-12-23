@@ -3,6 +3,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const {InjectManifest} = require('workbox-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -109,6 +110,10 @@ module.exports = {
     // new WebpackManifestPlugin(),
     new HtmlWebpackPlugin({
       template: 'public/index.html'
+    }),
+    new InjectManifest({
+      swSrc: './src/sw.ts',
+      swDest: 'service-worker.js'
     })
   ],
   optimization: {
@@ -118,7 +123,7 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
       maxInitialRequests: Infinity,
-      minSize: 0,
+      minSize: 200000,
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
