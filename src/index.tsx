@@ -9,7 +9,6 @@ import {ConfigProvider as AntdConfigProvider} from 'antd'
 import ruRuLocale from 'antd/lib/locale/ru_RU'
 import {ServiceWorkerManager} from './common/service/serviceWorker'
 import {RootDIType} from './common/dependencyInjection/rootType'
-
 ;(async () => {
   const rootDIContainer = createRootDIContainer()
 

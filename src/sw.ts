@@ -6,21 +6,67 @@ const SW_VERSION = 1
 const scope: ServiceWorkerGlobalScope = self as any
 precacheAndRoute((self as any).__WB_MANIFEST)
 
-scope.addEventListener('install', (event) => {
-  console.log(`Installing service worker v${SW_VERSION}`)
+import {registerRoute} from 'workbox-routing'
+import {NetworkFirst, StaleWhileRevalidate, CacheFirst} from 'workbox-strategies'
 
-  event.waitUntil(
-    new Promise((resolve, reject) => {
-      const request = self.indexedDB.open('db', DB_VERSION)
+// Used for filtering matches based on status code, header, or both
+import {CacheableResponsePlugin} from 'workbox-cacheable-response'
+// Used to limit entries in cache, remove entries after a certain period of time
+import {ExpirationPlugin} from 'workbox-expiration'
 
-      request.onerror = (event) => {
-        console.log('error opening IndexedDB')
-        reject()
-      }
-    })
-  )
-})
+// Cache page navigations (html) with a Network First strategy
+registerRoute(
+  // Check to see if the request is a navigation to a new page
+  ({request}) => request.mode === 'navigate',
+  // Use a Network First caching strategy
+  new NetworkFirst({
+    // Put all cached files in a cache named 'pages'
+    cacheName: 'pages',
+    plugins: [
+      // Ensure that only requests that result in a 200 status are cached
+      new CacheableResponsePlugin({
+        statuses: [200]
+      })
+    ]
+  })
+)
 
-scope.addEventListener('activate', () => {
-  console.log(`Activating service worker v${SW_VERSION}`)
-})
+// Cache CSS, JS, and Web Worker requests with a Stale While Revalidate strategy
+registerRoute(
+  // Check to see if the request's destination is style for stylesheets, script for JavaScript, or worker for web worker
+  ({request}) =>
+    request.destination === 'style' || request.destination === 'script' || request.destination === 'worker',
+  // Use a Stale While Revalidate caching strategy
+  new StaleWhileRevalidate({
+    // Put all cached files in a cache named 'assets'
+    cacheName: 'assets',
+    plugins: [
+      // Ensure that only requests that result in a 200 status are cached
+      new CacheableResponsePlugin({
+        statuses: [200]
+      })
+    ]
+  })
+)
+
+// Cache images with a Cache First strategy
+registerRoute(
+  // Check to see if the request's destination is style for an image
+  ({request}) => request.destination === 'image',
+  // Use a Cache First caching strategy
+  new CacheFirst({
+    // Put all cached files in a cache named 'images'
+    cacheName: 'images',
+    plugins: [
+      // Ensure that only requests that result in a 200 status are cached
+      new CacheableResponsePlugin({
+        statuses: [200]
+      }),
+      // Don't cache more than 50 items, and expire them after 30 days
+      new ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 60 * 60 * 24 * 30 // 30 Days
+      })
+    ]
+  })
+)
