@@ -9,6 +9,12 @@ import {ConfigProvider as AntdConfigProvider} from 'antd'
 import ruRuLocale from 'antd/lib/locale/ru_RU'
 import {ServiceWorkerManager} from './common/service/serviceWorker'
 import {RootDIType} from './common/dependencyInjection/rootType'
+
+const activateFastClick = () => {
+  const attachFastClick = require('fastclick')
+  attachFastClick(document.body)
+}
+
 ;(async () => {
   const rootDIContainer = createRootDIContainer()
 
@@ -35,6 +41,8 @@ import {RootDIType} from './common/dependencyInjection/rootType'
   if (isSwInstalled.isFailed) {
     throw isSwInstalled.error.unwrap()
   }
+
+  activateFastClick()
 
   console.log('activated')
 })()
