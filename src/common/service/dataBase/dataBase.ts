@@ -3,7 +3,7 @@ import {IDBPDatabase} from 'idb'
 import {DataBaseSchema} from './schema'
 
 export interface DataBase {
-  readonly idb: IDBPDatabase<DataBaseSchema>
+  readonly connection: IDBPDatabase<DataBaseSchema>
 
   init(): Promise<Result>
 }

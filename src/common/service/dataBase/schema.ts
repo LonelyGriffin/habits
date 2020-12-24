@@ -1,7 +1,7 @@
 import {DBSchema} from 'idb'
 
 export interface DataBaseSchema extends DBSchema {
-  diary_notion: {
+  diary_note: {
     key: string
     indexes: {by_date: string}
     value: {

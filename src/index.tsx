@@ -9,14 +9,30 @@ import {ConfigProvider as AntdConfigProvider} from 'antd'
 import ruRuLocale from 'antd/lib/locale/ru_RU'
 import {ServiceWorkerManager} from './common/service/serviceWorker'
 import {RootDIType} from './common/dependencyInjection/rootType'
+import {DataBase} from './common/service/dataBase'
+import {FastClick} from 'fastclick'
 
 const activateFastClick = () => {
-  const attachFastClick = require('fastclick')
-  attachFastClick(document.body)
+  debugger
+  FastClick.attach(document.body)
 }
 
 ;(async () => {
   const rootDIContainer = createRootDIContainer()
+
+  const sw = rootDIContainer.get<ServiceWorkerManager>(RootDIType.ServiceWorker)
+  const isSwRegistered = await sw.register()
+  if (isSwRegistered.isFailed) {
+    throw isSwRegistered.error.unwrap()
+  }
+
+  // activateFastClick()
+
+  const dataBaseService = rootDIContainer.get<DataBase>(RootDIType.DataBase)
+  const dataBaseInit = await dataBaseService.init()
+  if (dataBaseInit.isFailed) {
+    throw dataBaseInit.error.unwrap()
+  }
 
   ReactDOM.render(
     <React.StrictMode>
@@ -28,21 +44,4 @@ const activateFastClick = () => {
     </React.StrictMode>,
     document.getElementById('root')
   )
-
-  const sw = rootDIContainer.get<ServiceWorkerManager>(RootDIType.ServiceWorker)
-  const isSwRegistered = await sw.register()
-
-  if (isSwRegistered.isFailed) {
-    throw isSwRegistered.error.unwrap()
-  }
-  console.log('registered')
-  const isSwInstalled = await sw.waitStatus('installed')
-
-  if (isSwInstalled.isFailed) {
-    throw isSwInstalled.error.unwrap()
-  }
-
-  activateFastClick()
-
-  console.log('activated')
 })()

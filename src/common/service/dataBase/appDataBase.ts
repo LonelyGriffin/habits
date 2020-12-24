@@ -5,26 +5,27 @@ import {Config} from '../../config'
 import {IDBPDatabase, openDB} from 'idb'
 import {DataBaseSchema} from './schema'
 import {AppResult, AppResultError} from '../../value/result'
+import {ErrorChain} from '../../value/errorChain'
 
-injectable()
+@injectable()
 export class AppDataBase implements DataBase {
-  private _idb?: IDBPDatabase<DataBaseSchema>
+  private _connection?: IDBPDatabase<DataBaseSchema>
 
   constructor(@inject(RootDIType.Config) private config: Config) {}
 
-  get idb() {
-    if (!this._idb) {
+  get connection() {
+    if (!this._connection) {
       throw 'Trying to access the database without initialization'
     }
 
-    return this._idb
+    return this._connection
   }
 
   async init() {
     try {
-      this._idb = await openDB<DataBaseSchema>('storage', 1, {
+      this._connection = await openDB<DataBaseSchema>('storage', 1, {
         upgrade(db) {
-          const diaryStoreStore = db.createObjectStore('diary_notion', {
+          const diaryStoreStore = db.createObjectStore('diary_note', {
             keyPath: 'id'
           })
           diaryStoreStore.createIndex('by_date', 'date')
@@ -33,7 +34,12 @@ export class AppDataBase implements DataBase {
 
       return new AppResult()
     } catch (e) {
-      return new AppResultError('Opening database failed')
+      return new AppResultError(
+        new ErrorChain({
+          msg: 'Opening database failed',
+          nested: e
+        })
+      )
     }
   }
 }

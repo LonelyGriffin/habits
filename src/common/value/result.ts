@@ -32,7 +32,7 @@ export class AppResult<T = void, E extends Error = any> implements Result<T, E> 
   }
 }
 
-export class AppResultError<E extends Error = Error> implements Result<any, E> {
+export class AppResultError<E extends Error = Error, T = any> implements Result<T, E> {
   private readonly _error: E
 
   constructor(reason: E | string) {
@@ -51,7 +51,7 @@ export class AppResultError<E extends Error = Error> implements Result<any, E> {
     return new AppSame(this._error)
   }
 
-  unwrap() {
+  unwrap(): T {
     throw new ErrorChain({
       msg:
         'An attempt was made to unpack the result with an error. You may not have verified the success of the result',

@@ -2,5 +2,7 @@ export enum RootDIType {
   Config = 'Config',
   History = 'History',
   ServiceWorker = 'ServiceWorker',
-  Router = 'Router'
+  Router = 'Router',
+  DataBase = 'DataBase',
+  DiaryNoteRepository = 'DiaryNoteRepository'
 }
