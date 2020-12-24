@@ -1,30 +1,69 @@
-import React, {useCallback, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import moment, {Moment} from 'moment'
 import {PageHeader, DatePicker, Input, Divider, Button} from 'antd'
 import {EditOutlined, SaveOutlined} from '@ant-design/icons'
 import * as styles from './Diary.module.less'
+import {DiaryNote} from '../../../common/entity/diaryNote'
+import shortid from 'shortid'
+import {useService} from '../../../common/dependencyInjection/hooks'
+import {DiaryNoteRepository} from '../../../common/repository/diaryNote/diaryNoteRepository'
+import {RootDIType} from '../../../common/dependencyInjection/rootType'
 
 const {TextArea} = Input
 
 export function DiaryScreenView() {
-  const diaryNote = 'f'
-  const [selectedDate, setSelectedDate] = useState<Moment>(moment())
-  const [currentDiaryNote, setCurrentDiaryNote] = useState(diaryNote)
+  const diaryNote: DiaryNote | undefined = undefined
+  const [currentDiaryNote, setCurrentDiaryNote] = useState<DiaryNote | undefined>(diaryNote)
   const [isEditMode, setIsEditMode] = useState(false)
+
+  const diaryNoteRepository = useService<DiaryNoteRepository>(RootDIType.DiaryNoteRepository)
   const disabledFeatureDate = useCallback((current: Moment) => current && current > moment().endOf('day'), [])
+
+  const loadDiaryNotionByDate = async (date: Moment) => {
+    diaryNoteRepository.getByDate(date.endOf('day')).then((result) => {
+      debugger
+      if (result.unwrap().isSame) {
+        setCurrentDiaryNote(result.unwrap().unwrap())
+      } else {
+        setCurrentDiaryNote({
+          id: shortid(),
+          date: date,
+          text: ''
+        })
+      }
+    })
+  }
 
   const handleDatePickerChange = useCallback((date: Moment | null) => {
     if (date !== null) {
       setIsEditMode(false)
-      setSelectedDate(date)
+      void loadDiaryNotionByDate(date)
     }
   }, [])
 
   const handleSave = useCallback(() => {
     setIsEditMode(false)
+    if (currentDiaryNote) {
+      void diaryNoteRepository.set(currentDiaryNote)
+    }
+  }, [currentDiaryNote])
+
+  const editingAvailable = currentDiaryNote ? currentDiaryNote.date.diff(moment().endOf('day')) === 0 : true
+
+  useEffect(() => {
+    void loadDiaryNotionByDate(moment())
   }, [])
 
-  const editingAvailable = selectedDate.day() === moment().day()
+  const handleTextChange = useCallback((text: string) => {
+    setCurrentDiaryNote((state) =>
+      state
+        ? {
+            ...state,
+            text
+          }
+        : undefined
+    )
+  }, [])
 
   return (
     <div className={styles.root}>
@@ -34,7 +73,7 @@ export function DiaryScreenView() {
           className={styles.calendar}
           size={'large'}
           disabledDate={disabledFeatureDate}
-          defaultValue={selectedDate}
+          value={currentDiaryNote ? currentDiaryNote.date : undefined}
           onChange={handleDatePickerChange}
         />
         <Divider orientation={'left'}>Ваша заметка</Divider>
@@ -50,9 +89,9 @@ export function DiaryScreenView() {
               <TextArea
                 rows={8}
                 defaultValue={diaryNote}
-                value={currentDiaryNote}
+                value={currentDiaryNote ? currentDiaryNote.text : ''}
                 onChange={(e) => {
-                  setCurrentDiaryNote(e.target.value)
+                  handleTextChange(e.target.value)
                 }}
               />
             </>
@@ -65,7 +104,7 @@ export function DiaryScreenView() {
                 icon={<EditOutlined />}
                 onClick={() => setIsEditMode(true)}
               />
-              <span>{currentDiaryNote}</span>
+              <span>{currentDiaryNote ? currentDiaryNote.text : ''}</span>
             </>
           )}
         </div>
