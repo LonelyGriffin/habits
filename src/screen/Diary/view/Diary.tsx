@@ -1,15 +1,20 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import moment, {Moment} from 'moment'
-import {PageHeader, DatePicker, Input, Divider, Button} from 'antd'
-import {EditOutlined, SaveOutlined} from '@ant-design/icons'
 import * as styles from './Diary.module.less'
 import {DiaryNote} from '../../../common/entity/diaryNote'
 import shortid from 'shortid'
 import {useService} from '../../../common/dependencyInjection/hooks'
 import {DiaryNoteRepository} from '../../../common/repository/diaryNote/diaryNoteRepository'
 import {RootDIType} from '../../../common/dependencyInjection/rootType'
-
-const {TextArea} = Input
+import IconButton from '@material-ui/core/IconButton'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import AppBar from '@material-ui/core/AppBar'
+import {DatePicker} from '@material-ui/pickers'
+import {TextField} from '@material-ui/core'
+import SaveIcon from '@material-ui/icons/Save'
+import EditIcon from '@material-ui/icons/Edit'
+import Box from '@material-ui/core/Box'
 
 export function DiaryScreenView() {
   const diaryNote: DiaryNote | undefined = undefined
@@ -47,7 +52,7 @@ export function DiaryScreenView() {
     }
   }, [currentDiaryNote])
 
-  const editingAvailable = currentDiaryNote ? currentDiaryNote.date.diff(moment().endOf('day')) === 0 : true
+  const editingAvailable = currentDiaryNote ? currentDiaryNote.date.diff(moment().endOf('day')) === 0 : false
 
   useEffect(() => {
     void loadDiaryNotionByDate(moment())
@@ -66,27 +71,32 @@ export function DiaryScreenView() {
 
   return (
     <div className={styles.root}>
-      <PageHeader className={styles.header} title={'Дневник'} />
+      <AppBar position='static'>
+        <Toolbar>
+          <Typography variant='h6'>Дневник</Typography>
+        </Toolbar>
+      </AppBar>
       <div className={styles.body}>
+        <Typography variant='h5'>Запись</Typography>
         <DatePicker
           className={styles.calendar}
-          size={'large'}
-          disabledDate={disabledFeatureDate}
           value={currentDiaryNote ? currentDiaryNote.date : undefined}
           onChange={handleDatePickerChange}
         />
-        <Divider orientation={'left'}>Ваша заметка</Divider>
+        <br />
         <div className={styles.editableNote}>
           {editingAvailable && isEditMode ? (
             <>
-              <Button
-                className={styles.editableNoteAction}
-                shape='circle'
-                icon={<SaveOutlined />}
-                onClick={handleSave}
-              />
-              <TextArea
+              <Box className={styles.editableNoteAction}>
+                <IconButton onClick={handleSave}>
+                  <SaveIcon />
+                </IconButton>
+              </Box>
+              <TextField
+                fullWidth
                 rows={8}
+                multiline
+                variant={'outlined'}
                 defaultValue={diaryNote}
                 value={currentDiaryNote ? currentDiaryNote.text : ''}
                 onChange={(e) => {
@@ -96,13 +106,11 @@ export function DiaryScreenView() {
             </>
           ) : (
             <>
-              <Button
-                disabled={!editingAvailable}
-                className={styles.editableNoteAction}
-                shape='circle'
-                icon={<EditOutlined />}
-                onClick={() => setIsEditMode(true)}
-              />
+              <Box className={styles.editableNoteAction}>
+                <IconButton disabled={!editingAvailable} onClick={() => setIsEditMode(true)}>
+                  <EditIcon />
+                </IconButton>
+              </Box>
               <span>{currentDiaryNote ? currentDiaryNote.text : ''}</span>
             </>
           )}

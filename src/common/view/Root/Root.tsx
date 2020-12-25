@@ -14,7 +14,6 @@ function Root() {
       setCurrentRoute(newCurrentRouter)
     })
   }, [])
-
   switch (currentRoute.screenType) {
     case ScreenType.Diary:
       return <DiaryScreenView />

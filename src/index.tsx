@@ -1,19 +1,18 @@
 import 'reflect-metadata'
-import 'antd/dist/antd.less'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Root from './common/view/Root/Root'
 import {createRootDIContainer} from './common/dependencyInjection/rootContainer'
 import {DIContainerContext} from './common/dependencyInjection/reactContext'
-import {ConfigProvider as AntdConfigProvider} from 'antd'
-import ruRuLocale from 'antd/lib/locale/ru_RU'
 import {ServiceWorkerService} from './common/service/serviceWorker'
 import {RootDIType} from './common/dependencyInjection/rootType'
 import {DataBase} from './common/service/dataBase'
 import {FastClick} from 'fastclick'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import {MuiPickersUtilsProvider} from '@material-ui/pickers'
+import MomentUtils from '@date-io/moment'
 
 const activateFastClick = () => {
-  debugger
   FastClick.attach(document.body)
 }
 
@@ -36,11 +35,12 @@ const activateFastClick = () => {
 
   ReactDOM.render(
     <React.StrictMode>
-      <DIContainerContext.Provider value={rootDIContainer}>
-        <AntdConfigProvider locale={ruRuLocale}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <CssBaseline />
+        <DIContainerContext.Provider value={rootDIContainer}>
           <Root />
-        </AntdConfigProvider>
-      </DIContainerContext.Provider>
+        </DIContainerContext.Provider>
+      </MuiPickersUtilsProvider>
     </React.StrictMode>,
     document.getElementById('root')
   )
