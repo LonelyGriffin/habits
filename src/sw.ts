@@ -13,6 +13,7 @@ import {NetworkFirst, StaleWhileRevalidate, CacheFirst} from 'workbox-strategies
 import {CacheableResponsePlugin} from 'workbox-cacheable-response'
 // Used to limit entries in cache, remove entries after a certain period of time
 import {ExpirationPlugin} from 'workbox-expiration'
+import {skipWaiting} from 'workbox-core'
 
 // Cache page navigations (html) with a Network First strategy
 registerRoute(
@@ -65,8 +66,14 @@ registerRoute(
       // Don't cache more than 50 items, and expire them after 30 days
       new ExpirationPlugin({
         maxEntries: 50,
-        maxAgeSeconds: 60 * 60 * 24 * 30 // 30 Days
+        maxAgeSeconds: 60 * 60 * 24 * 29 // 30 Days
       })
     ]
   })
 )
+
+addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    skipWaiting()
+  }
+})

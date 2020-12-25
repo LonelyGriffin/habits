@@ -21,7 +21,6 @@ export function DiaryScreenView() {
 
   const loadDiaryNotionByDate = async (date: Moment) => {
     diaryNoteRepository.getByDate(date.endOf('day')).then((result) => {
-      debugger
       if (result.unwrap().isSame) {
         setCurrentDiaryNote(result.unwrap().unwrap())
       } else {

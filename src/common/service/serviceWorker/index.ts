@@ -1,1 +1,1 @@
-export * from './serviceWorkerManager'
+export * from './serviceWorkerService'

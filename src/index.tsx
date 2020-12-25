@@ -7,7 +7,7 @@ import {createRootDIContainer} from './common/dependencyInjection/rootContainer'
 import {DIContainerContext} from './common/dependencyInjection/reactContext'
 import {ConfigProvider as AntdConfigProvider} from 'antd'
 import ruRuLocale from 'antd/lib/locale/ru_RU'
-import {ServiceWorkerManager} from './common/service/serviceWorker'
+import {ServiceWorkerService} from './common/service/serviceWorker'
 import {RootDIType} from './common/dependencyInjection/rootType'
 import {DataBase} from './common/service/dataBase'
 import {FastClick} from 'fastclick'
@@ -20,7 +20,7 @@ const activateFastClick = () => {
 ;(async () => {
   const rootDIContainer = createRootDIContainer()
 
-  const sw = rootDIContainer.get<ServiceWorkerManager>(RootDIType.ServiceWorker)
+  const sw = rootDIContainer.get<ServiceWorkerService>(RootDIType.ServiceWorker)
   const isSwRegistered = await sw.register()
   if (isSwRegistered.isFailed) {
     throw isSwRegistered.error.unwrap()

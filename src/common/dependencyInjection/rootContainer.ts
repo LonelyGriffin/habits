@@ -4,8 +4,8 @@ import {Router} from '../service/router'
 import {AppRouter} from '../service/router/appRouter'
 import {createBrowserHistory, History} from 'history'
 import {Config, CONFIG} from '../config'
-import {ServiceWorkerManager} from '../service/serviceWorker'
-import {AppServiceWorker} from '../service/serviceWorker/appServiceWorker'
+import {ServiceWorkerService} from '../service/serviceWorker'
+import {AppServiceWorkerService} from '../service/serviceWorker/appServiceWorkerService'
 import {DataBase} from '../service/dataBase'
 import {AppDataBase} from '../service/dataBase/appDataBase'
 import {DiaryNoteRepository} from '../repository/diaryNote/diaryNoteRepository'
@@ -15,7 +15,7 @@ export const createRootDIContainer = () => {
   const container = new Container()
 
   container.bind<Config>(RootDIType.Config).toConstantValue(CONFIG)
-  container.bind<ServiceWorkerManager>(RootDIType.ServiceWorker).to(AppServiceWorker).inSingletonScope()
+  container.bind<ServiceWorkerService>(RootDIType.ServiceWorker).to(AppServiceWorkerService).inSingletonScope()
   container.bind<History>(RootDIType.History).toConstantValue(createBrowserHistory())
   container.bind<Router>(RootDIType.Router).to(AppRouter).inSingletonScope()
   container.bind<DataBase>(RootDIType.DataBase).to(AppDataBase).inSingletonScope()
