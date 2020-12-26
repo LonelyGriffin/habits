@@ -15,6 +15,10 @@ import {TextField} from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
 import EditIcon from '@material-ui/icons/Edit'
 import Box from '@material-ui/core/Box'
+import {ScreenType} from '../../../common/service/router'
+import BottomNavigation from '@material-ui/core/BottomNavigation'
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
+import {useRouter} from '../../../common/service/router/hooks'
 
 export function DiaryScreenView() {
   const diaryNote: DiaryNote | undefined = undefined
@@ -23,6 +27,8 @@ export function DiaryScreenView() {
 
   const diaryNoteRepository = useService<DiaryNoteRepository>(RootDIType.DiaryNoteRepository)
   const disabledFeatureDate = useCallback((current: Moment) => current && current > moment().endOf('day'), [])
+
+  const router = useRouter()
 
   const loadDiaryNotionByDate = async (date: Moment) => {
     diaryNoteRepository.getByDate(date.endOf('day')).then((result) => {
@@ -116,6 +122,16 @@ export function DiaryScreenView() {
           )}
         </div>
       </div>
+      <BottomNavigation
+        value={ScreenType.Diary}
+        onChange={(_, newValue) => {
+          router.replaceTo(newValue)
+        }}
+        showLabels
+      >
+        <BottomNavigationAction value={ScreenType.Diary} label='Дневник' />
+        <BottomNavigationAction value={ScreenType.Habits} label='Привычки' />
+      </BottomNavigation>
     </div>
   )
 }
