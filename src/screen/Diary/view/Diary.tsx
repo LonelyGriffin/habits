@@ -19,6 +19,7 @@ import {ScreenType} from '../../../common/service/router'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import {useRouter} from '../../../common/service/router/hooks'
+import {Page} from '../../../common/view/page'
 
 export function DiaryScreenView() {
   const diaryNote: DiaryNote | undefined = undefined
@@ -76,62 +77,45 @@ export function DiaryScreenView() {
   }, [])
 
   return (
-    <div className={styles.root}>
-      <AppBar position='static'>
-        <Toolbar>
-          <Typography variant='h6'>Дневник</Typography>
-        </Toolbar>
-      </AppBar>
-      <div className={styles.body}>
-        <Typography variant='h5'>Запись</Typography>
-        <DatePicker
-          className={styles.calendar}
-          value={currentDiaryNote ? currentDiaryNote.date : undefined}
-          onChange={handleDatePickerChange}
-        />
-        <br />
-        <div className={styles.editableNote}>
-          {editingAvailable && isEditMode ? (
-            <>
-              <Box className={styles.editableNoteAction}>
-                <IconButton onClick={handleSave}>
-                  <SaveIcon />
-                </IconButton>
-              </Box>
-              <TextField
-                fullWidth
-                rows={8}
-                multiline
-                variant={'outlined'}
-                defaultValue={diaryNote}
-                value={currentDiaryNote ? currentDiaryNote.text : ''}
-                onChange={(e) => {
-                  handleTextChange(e.target.value)
-                }}
-              />
-            </>
-          ) : (
-            <>
-              <Box className={styles.editableNoteAction}>
-                <IconButton disabled={!editingAvailable} onClick={() => setIsEditMode(true)}>
-                  <EditIcon />
-                </IconButton>
-              </Box>
-              <span>{currentDiaryNote ? currentDiaryNote.text : ''}</span>
-            </>
-          )}
-        </div>
+    <Page>
+      <Typography variant='h5'>Запись</Typography>
+      <DatePicker
+        className={styles.calendar}
+        value={currentDiaryNote ? currentDiaryNote.date : undefined}
+        onChange={handleDatePickerChange}
+      />
+      <br />
+      <div className={styles.editableNote}>
+        {editingAvailable && isEditMode ? (
+          <>
+            <Box className={styles.editableNoteAction}>
+              <IconButton onClick={handleSave}>
+                <SaveIcon />
+              </IconButton>
+            </Box>
+            <TextField
+              fullWidth
+              rows={8}
+              multiline
+              variant={'outlined'}
+              defaultValue={diaryNote}
+              value={currentDiaryNote ? currentDiaryNote.text : ''}
+              onChange={(e) => {
+                handleTextChange(e.target.value)
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <Box className={styles.editableNoteAction}>
+              <IconButton disabled={!editingAvailable} onClick={() => setIsEditMode(true)}>
+                <EditIcon />
+              </IconButton>
+            </Box>
+            <span>{currentDiaryNote ? currentDiaryNote.text : ''}</span>
+          </>
+        )}
       </div>
-      <BottomNavigation
-        value={ScreenType.Diary}
-        onChange={(_, newValue) => {
-          router.replaceTo(newValue)
-        }}
-        showLabels
-      >
-        <BottomNavigationAction value={ScreenType.Diary} label='Дневник' />
-        <BottomNavigationAction value={ScreenType.Habits} label='Привычки' />
-      </BottomNavigation>
-    </div>
+    </Page>
   )
 }

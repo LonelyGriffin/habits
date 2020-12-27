@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect} from 'react'
 import {useRouter} from '../../common/service/router/hooks'
 import {ScreenType} from '../../common/service/router'
+import {Page} from '../../common/view/page'
 
 export function HabitsScreenView() {
   const router = useRouter()
@@ -9,10 +10,5 @@ export function HabitsScreenView() {
     router.replaceTo(ScreenType.Diary)
   }, [router])
 
-  return (
-    <div>
-      <div>Habits</div>
-      <button onClick={h}>{'Diary'}</button>
-    </div>
-  )
+  return <Page></Page>
 }
