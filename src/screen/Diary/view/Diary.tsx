@@ -7,19 +7,16 @@ import {useService} from '../../../common/dependencyInjection/hooks'
 import {DiaryNoteRepository} from '../../../common/repository/diaryNote/diaryNoteRepository'
 import {RootDIType} from '../../../common/dependencyInjection/rootType'
 import IconButton from '@material-ui/core/IconButton'
-import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import AppBar from '@material-ui/core/AppBar'
 import {DatePicker} from '@material-ui/pickers'
 import {TextField} from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
 import EditIcon from '@material-ui/icons/Edit'
 import Box from '@material-ui/core/Box'
-import {ScreenType} from '../../../common/service/router'
-import BottomNavigation from '@material-ui/core/BottomNavigation'
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import {useRouter} from '../../../common/service/router/hooks'
 import {Page} from '../../../common/view/page'
+import marked from 'marked'
+import DOMPurify from 'dompurify'
 
 export function DiaryScreenView() {
   const diaryNote: DiaryNote | undefined = undefined
@@ -112,7 +109,13 @@ export function DiaryScreenView() {
                 <EditIcon />
               </IconButton>
             </Box>
-            <span>{currentDiaryNote ? currentDiaryNote.text : ''}</span>
+            <span
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(marked(currentDiaryNote ? currentDiaryNote.text : ''), {
+                  USE_PROFILES: {html: true}
+                })
+              }}
+            />
           </>
         )}
       </div>
