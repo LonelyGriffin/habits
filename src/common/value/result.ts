@@ -9,6 +9,8 @@ export interface Result<T = void, E extends Error = any> {
   unwrap(): T
 }
 
+export type AsyncResult<T = void, E extends Error = any> = Promise<Result<T, E>>
+
 export class AppResult<T = void, E extends Error = any> implements Result<T, E> {
   private readonly value: T
   constructor(value?: T) {
