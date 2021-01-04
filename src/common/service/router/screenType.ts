@@ -1,4 +1,5 @@
 export enum ScreenType {
   Habits = 'habit',
-  Diary = 'diary'
+  Diary = 'diary',
+  Loading = 'loading'
 }

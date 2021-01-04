@@ -11,6 +11,9 @@ import {FastClick} from 'fastclick'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import {MuiPickersUtilsProvider} from '@material-ui/pickers'
 import MomentUtils from '@date-io/moment'
+import {Router, ScreenType} from './common/service/router'
+import {History} from 'history'
+import {Yadisk} from './common/service/yadisk'
 
 const activateFastClick = () => {
   FastClick.attach(document.body)
@@ -32,6 +35,33 @@ const activateFastClick = () => {
   if (dataBaseInit.isFailed) {
     throw dataBaseInit.error.unwrap()
   }
+
+  const routerService = rootDIContainer.get<Router>(RootDIType.Router)
+  const historyService = rootDIContainer.get<History>(RootDIType.History)
+
+  const query = historyService.location.search
+    .substring(1)
+    .split('&')
+    .reduce((result, pair) => {
+      const x = pair.split('=')
+      result[x[0]] = x[1]
+      return result
+    }, {} as Record<string, string>)
+
+  if (query['route'] && query['route'] === '/oauth/yandex') {
+    const yadiskService = rootDIContainer.get<Yadisk>(RootDIType.Yadisk)
+    const hash = historyService.location.hash
+      .substring(1)
+      .split('&')
+      .reduce((result, pair) => {
+        const x = pair.split('=')
+        result[x[0]] = x[1]
+        return result
+      }, {} as Record<string, string>)
+    await yadiskService.setToken(hash['access_token'])
+    window.location.href = 'http://localhost:8080'
+  }
+  routerService.replaceTo(ScreenType.Diary)
 
   ReactDOM.render(
     <React.StrictMode>

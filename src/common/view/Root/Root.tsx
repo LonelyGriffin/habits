@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import * as styles from './Root.module.less'
 import {useRouter} from '../../service/router/hooks'
 import {DiaryScreenView} from '../../../screen/Diary/view/Diary'
 import {HabitsScreenView} from '../../../screen/view/Habits'
 import {ScreenType} from '../../service/router'
+import {LoadingView} from '../../../screen/Loading/view/Loading'
 
 function Root() {
   const router = useRouter()
@@ -19,6 +19,8 @@ function Root() {
       return <DiaryScreenView />
     case ScreenType.Habits:
       return <HabitsScreenView />
+    case ScreenType.Loading:
+      return <LoadingView />
   }
 }
 

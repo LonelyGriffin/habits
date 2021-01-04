@@ -42,7 +42,7 @@ export class AppDiaryNoteRepository implements DiaryNoteRepository {
       }
 
       await this.db.connection.put('diary_note', diaryNoteSerializedDate)
-
+      localStorage.setItem('timestamp', moment().toISOString())
       return new AppResult()
     } catch (e) {
       return new AppResultError(
@@ -52,5 +52,28 @@ export class AppDiaryNoteRepository implements DiaryNoteRepository {
         })
       )
     }
+  }
+  async all() {
+    try {
+      const all = await this.db.connection.getAll('diary_note')
+
+      return new AppResult(all.map((x) => ({...x, date: moment(x.date)})))
+    } catch (e) {
+      return new AppResultError(
+        new ErrorChain({
+          msg: `An error occurred while trying to get all diary notes`,
+          nested: e
+        })
+      )
+    }
+  }
+  async resetAll(all: DiaryNote[]) {
+    await this.db.connection.clear('diary_note')
+
+    for (let item of all) {
+      await this.set(item)
+    }
+
+    return new AppResult()
   }
 }

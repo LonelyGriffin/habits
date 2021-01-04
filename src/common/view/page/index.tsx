@@ -7,6 +7,7 @@ import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import {useRouter} from '../../service/router/hooks'
 import {ScreenType} from '../../service/router'
+import {YadiskHeaderControl} from '../yadisk/header_controll'
 
 type Props = {
   children: React.ReactNode
@@ -27,6 +28,7 @@ export function Page(props: Props) {
       <AppBar position='static'>
         <Toolbar>
           <Typography variant='h6'>{route.screenType === ScreenType.Diary ? 'Дневник' : 'Привычки'}</Typography>
+          <YadiskHeaderControl />
         </Toolbar>
       </AppBar>
       <div className={styles.body}>{props.children}</div>

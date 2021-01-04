@@ -10,6 +10,8 @@ import {DataBase} from '../service/dataBase'
 import {AppDataBase} from '../service/dataBase/appDataBase'
 import {DiaryNoteRepository} from '../repository/diaryNote/diaryNoteRepository'
 import {AppDiaryNoteRepository} from '../repository/diaryNote/appDiaryNoteRepository'
+import {AppYadisk} from '../service/yadisk/appYadisk'
+import {Yadisk} from '../service/yadisk'
 
 export const createRootDIContainer = () => {
   const container = new Container()
@@ -20,6 +22,7 @@ export const createRootDIContainer = () => {
   container.bind<Router>(RootDIType.Router).to(AppRouter).inSingletonScope()
   container.bind<DataBase>(RootDIType.DataBase).to(AppDataBase).inSingletonScope()
   container.bind<DiaryNoteRepository>(RootDIType.DiaryNoteRepository).to(AppDiaryNoteRepository).inSingletonScope()
+  container.bind<Yadisk>(RootDIType.Yadisk).to(AppYadisk).inSingletonScope()
 
   return container
 }

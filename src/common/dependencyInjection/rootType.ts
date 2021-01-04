@@ -4,5 +4,6 @@ export enum RootDIType {
   ServiceWorker = 'ServiceWorker',
   Router = 'Router',
   DataBase = 'DataBase',
+  Yadisk = 'Yadisk',
   DiaryNoteRepository = 'DiaryNoteRepository'
 }
