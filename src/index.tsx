@@ -59,7 +59,7 @@ const activateFastClick = () => {
         return result
       }, {} as Record<string, string>)
     await yadiskService.setToken(hash['access_token'])
-    window.location.href = 'http://localhost:8080'
+    window.location.href = 'https://beta.habits.lonelygriffin.com'
   }
   routerService.replaceTo(ScreenType.Diary)
 

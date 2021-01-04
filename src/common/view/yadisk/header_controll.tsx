@@ -10,7 +10,7 @@ export const YadiskHeaderControl = () => {
     window.location.href =
       'https://oauth.yandex.ru/authorize?response_type=token&' +
       'client_id=23cb967d4f47442c8ba11343de9ab679&' +
-      'redirect_uri=http://localhost:8080?route=/oauth/yandex'
+      'redirect_uri=https://beta.habits.lonelygriffin.com?route=/oauth/yandex'
   }
   const authClickHandler = useCallback(() => {
     if (yadisk.hasToken()) {
@@ -22,7 +22,7 @@ export const YadiskHeaderControl = () => {
   const syncClickHandler = useCallback(async () => {
     const syncResult = await yadisk.sync()
     if (syncResult.isFailed) {
-      alert('Для синхронизации нужн авторизоваться на яндексе')
+      alert('Для синхронизации нужно авторизоваться на яндексе')
       redirectToAuth()
     }
   }, [])
