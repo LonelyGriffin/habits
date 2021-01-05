@@ -1,6 +1,6 @@
 export const CONFIG = {
   serviceWorkerSrc: '/service-worker.js',
-  baseUrl: 'http://localhost:8080'
+  baseUrl: 'https://beta.lonelygriffin.com'
 }
 
 export type Config = typeof CONFIG
