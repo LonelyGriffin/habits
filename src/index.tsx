@@ -14,6 +14,7 @@ import MomentUtils from '@date-io/moment'
 import {Router, ScreenType} from './common/service/router'
 import {History} from 'history'
 import {Yadisk} from './common/service/yadisk'
+import {Config} from './common/config'
 
 const activateFastClick = () => {
   FastClick.attach(document.body)
@@ -50,6 +51,7 @@ const activateFastClick = () => {
 
   if (query['route'] && query['route'] === '/oauth/yandex') {
     const yadiskService = rootDIContainer.get<Yadisk>(RootDIType.Yadisk)
+    const config = rootDIContainer.get<Config>(RootDIType.Config)
     const hash = historyService.location.hash
       .substring(1)
       .split('&')
@@ -59,7 +61,7 @@ const activateFastClick = () => {
         return result
       }, {} as Record<string, string>)
     await yadiskService.setToken(hash['access_token'])
-    window.location.href = 'https://beta.habits.lonelygriffin.com'
+    window.location.href = config.baseUrl
   }
   routerService.replaceTo(ScreenType.Diary)
 

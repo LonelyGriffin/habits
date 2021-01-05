@@ -91,7 +91,11 @@ export class AppYadisk implements Yadisk {
         return new AppResultError('Sync failed')
       }
 
-      const response = await axios.get(downloadResponse?.data?.href)
+      const response = await axios.get(downloadResponse?.data?.href, {
+        headers: {
+          origin: null
+        }
+      })
 
       const data = response.data
 
