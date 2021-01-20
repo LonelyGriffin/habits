@@ -7,6 +7,10 @@ import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import {useRouter} from '../../service/router/hooks'
 import {ScreenType} from '../../service/router'
+import {Button} from '@material-ui/core'
+import {useService} from '../../dependencyInjection/hooks'
+import {DiaryNoteRepository} from '../../repository/diaryNote/diaryNoteRepository'
+import {RootDIType} from '../../dependencyInjection/rootType'
 
 type Props = {
   children: React.ReactNode
@@ -14,6 +18,7 @@ type Props = {
 
 export function Page(props: Props) {
   const router = useRouter()
+  const diaryNoteRepository = useService<DiaryNoteRepository>(RootDIType.DiaryNoteRepository)
   const [route, setRoute] = useState(router.currentRoute)
 
   useEffect(() => {

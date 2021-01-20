@@ -9,7 +9,7 @@ import {RootDIType} from '../../../common/dependencyInjection/rootType'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import {DatePicker} from '@material-ui/pickers'
-import {TextField} from '@material-ui/core'
+import {Button, TextField} from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
 import EditIcon from '@material-ui/icons/Edit'
 import Box from '@material-ui/core/Box'
@@ -25,6 +25,13 @@ export function DiaryScreenView() {
 
   const diaryNoteRepository = useService<DiaryNoteRepository>(RootDIType.DiaryNoteRepository)
   const disabledFeatureDate = useCallback((current: Moment) => current && current > moment().endOf('day'), [])
+
+  const [all, setAll] = useState([] as any[])
+  const handleSaveAll = useCallback(async () => {
+    const result = await diaryNoteRepository.getAll()
+    console.log(result)
+    setAll(result.unwrap())
+  }, [])
 
   const router = useRouter()
 
@@ -118,6 +125,24 @@ export function DiaryScreenView() {
             />
           </>
         )}
+      </div>
+      <div>
+        <Button onClick={handleSaveAll}>All</Button>
+        {all.map((x) => {
+          return (
+            <>
+              <br />
+              <div>{x.date}</div>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(marked(x ? x.text : ''), {
+                    USE_PROFILES: {html: true}
+                  })
+                }}
+              />
+            </>
+          )
+        })}
       </div>
     </Page>
   )

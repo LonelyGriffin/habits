@@ -53,4 +53,16 @@ export class AppDiaryNoteRepository implements DiaryNoteRepository {
       )
     }
   }
+  async getAll(): Promise<any> {
+    try {
+      return new AppResult(await this.db.connection.getAll('diary_note'))
+    } catch (e) {
+      return new AppResultError(
+        new ErrorChain({
+          msg: `An error occurred while trying to get all diary notes`,
+          nested: e
+        })
+      )
+    }
+  }
 }
